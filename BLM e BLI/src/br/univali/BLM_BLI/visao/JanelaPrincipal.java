@@ -1,15 +1,21 @@
 package br.univali.BLM_BLI.visao;
 
-import br.univali.BLM_BLI.modelo.BLIterada;
-import br.univali.BLM_BLI.modelo.BLMonotona;
+import br.univali.BLM_BLI.controle.ControladorBLIterada;
+import br.univali.BLM_BLI.controle.ControladorBLMonotona;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class JanelaPrincipal extends javax.swing.JFrame {
-
-    public static String relatório;
+    
+    private ControladorBLMonotona controlMonotona;
+    private ControladorBLIterada controlIterada;
     
     public JanelaPrincipal() {
         initComponents();
@@ -18,12 +24,35 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         buttonGerar.addActionListener(e -> {
-            new BLMonotona();
+            controlMonotona = new ControladorBLMonotona();
             System.out.println("Monotona concluida!");
             
-            new BLIterada();
+            controlIterada = new ControladorBLIterada();
             System.out.println("Iterada concluida!");
+            
+            gerarRelatorio();
         });
+    }
+    
+    public void gerarRelatorio() {
+        try {
+        JFileChooser chooserDiretorio = new JFileChooser();
+        chooserDiretorio.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+        chooserDiretorio.showOpenDialog(getParent());
+        String diretorio = chooserDiretorio.getSelectedFile().getAbsolutePath();
+
+        File file = new File(diretorio + "\\Relatorio_BLMxBLI.txt");
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write(controlMonotona.getRelatorio() + controlIterada.getRelatorio());
+        
+        bw.close();
+        fw.close();
+        JOptionPane.showMessageDialog(this, "Relatorio gerado com sucesso em " + diretorio);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
