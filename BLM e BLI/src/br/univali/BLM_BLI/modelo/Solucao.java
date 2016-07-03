@@ -6,13 +6,13 @@ import java.util.List;
 public class Solucao {
     private List<List<Integer>> maquinas;
     private int makespan = 0;
-    private int maquinaCritica;
+    private int indexMaquinaCritica;
 
     public Solucao() {
         maquinas = new ArrayList();
     }   
     
-    public void calcularMakespan() {
+    public int calcularMakespan() {
         for (int i = 0; i < maquinas.size(); i++) {
             int temp = 0;
             for (Integer tarefa : maquinas.get(i)) {
@@ -20,9 +20,10 @@ public class Solucao {
             }
             if (temp > makespan){
                 makespan = temp;
-                maquinaCritica = i;
+                indexMaquinaCritica = i;
             }
         }
+        return makespan;
     }
 
     public List<List<Integer>> getMaquinas() {
@@ -34,12 +35,13 @@ public class Solucao {
     }
 
     public int getMakespan() {
-        calcularMakespan();
+        //calcularMakespan();       //Removido pois iria gerar processamento desnecessario cada vez que chamasse o getMakespan
         return makespan;
     }
 
-    public void setMakespan(int makespan) {
-        this.makespan = makespan;
+    public int getIndexMaquinaCritica() {
+        calcularMakespan();
+        return indexMaquinaCritica;
     }
     
 }
