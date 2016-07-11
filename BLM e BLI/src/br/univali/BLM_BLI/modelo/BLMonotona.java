@@ -36,14 +36,14 @@ public class BLMonotona {
         int makespanAtual;
         do {
             makespanAtual = solucao.calcularMakespan();
-            novaSolucao = visinho(solucao);
+            novaSolucao = vizinho(solucao);
             if(novaSolucao.calcularMakespan() < makespanAtual){
                 solucao = novaSolucao;
             }
         } while (novaSolucao.calcularMakespan() < makespanAtual);
     }
 
-    private Solucao visinho(Solucao solucao) {
+    private Solucao vizinho(Solucao solucao) {
         Solucao temp = new Solucao(solucao);                                    
         List<Integer> maquinaCritica = 
                 temp.getMaquinas().get(temp.getIndexMaquinaCritica());          // Pegar maquina critica
