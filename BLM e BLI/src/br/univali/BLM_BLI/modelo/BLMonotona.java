@@ -1,32 +1,34 @@
 package br.univali.BLM_BLI.modelo;
 
+import br.univali.BLM_BLI.controle.ControladorBLMonotona;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class BLMonotona {
     private Random rand;
+    Solucao solucao;
 
     public BLMonotona() {
         rand = new Random();
+        solucao = new Solucao();
     }
     
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
-        Solucao solucao = new Solucao();
         solucao.getMaquinas().clear();
-        for (int i = 0; i < qtdMaquinas; i++) {
-            solucao.getMaquinas().add(new ArrayList<>());
-        }
-        /*/PARA TESTES, USAREMOS VALORES FIXOS
-        for (int i = 0; i < qtdTarefas; i++) {
-            solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);
-        }*/
+        int randomico;
         
-        // VALORES RETIRADOS DA APRESENTAÇÃO DO ALEX.
-        solucao.getMaquinas().get(0).add(6);
-        solucao.getMaquinas().get(0).add(1);
-        solucao.getMaquinas().get(0).add(4);
-        solucao.getMaquinas().get(0).add(5);
+        for (int i = 0; i < qtdMaquinas; i++) {
+            solucao.getMaquinas().add(new ArrayList<>());                       //  Instancia maquinas
+        } 
+        
+        for (int i = 0; i < qtdTarefas; i++) {
+            randomico = rand.nextInt(100) + 1;
+            solucao.getMaquinas().get(0).add(randomico);            //  Instancia as tarefas na primeira maquina
+        }
+        
+        ControladorBLMonotona.relatorio += "Maquinas:" + qtdMaquinas + "\tTarefas:" + qtdTarefas + "\r\n";
+        relatorioMaquinario();
         
         primeiraMelhora(solucao);
     }
@@ -39,6 +41,7 @@ public class BLMonotona {
             novaSolucao = vizinho(solucao);
             if(novaSolucao.calcularMakespan() < makespanAtual){
                 solucao = novaSolucao;
+                relatorioMaquinario();
             }
         } while (novaSolucao.calcularMakespan() < makespanAtual);
     }
@@ -47,7 +50,7 @@ public class BLMonotona {
         Solucao temp = new Solucao(solucao);                                    
         List<Integer> maquinaCritica = 
                 temp.getMaquinas().get(temp.getIndexMaquinaCritica());          // Pegar maquina critica
-        int makespanAtual = temp.calcularMakespan();                            // Salva antigo maquespan antes de alterar a solução
+        int makespanAtual = temp.calcularMakespan();                            // Salva antigo makespan antes de alterar a solução
         int tarefa = maquinaCritica.get(maquinaCritica.size()-1);               // Salva tarefa a ser trocada
         maquinaCritica.remove(maquinaCritica.size()-1);                         // Remove tarefa a ser trocada da solução
         
@@ -62,4 +65,16 @@ public class BLMonotona {
         return solucao;                                                         // Se não teve nenhuma melhora retorna solução sem alteraração
     }
     
+    public void relatorioMaquinario() {
+        ControladorBLMonotona.relatorio += "\r\n--------------------------\r\n";
+        
+        for (List<Integer> maquina : solucao.getMaquinas()) {
+            ControladorBLMonotona.relatorio += "> ";
+            for (Integer tarefa : maquina) {
+                ControladorBLMonotona.relatorio += tarefa + "\t";
+            }
+            ControladorBLMonotona.relatorio += "\r\n";
+        }
+        ControladorBLMonotona.relatorio += "\r\n--------------------------\r\n";
+    }
 }
