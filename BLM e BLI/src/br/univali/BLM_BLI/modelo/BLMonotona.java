@@ -12,33 +12,32 @@ public class BLMonotona {
     }
     
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
-        Solucao solucao = new Solucao();
-        solucao.getMaquinas().clear();
-        // Criando as maquinas com sua lista de tarefas
-        for (int i = 0; i < qtdMaquinas; i++) {
-            solucao.getMaquinas().add(new ArrayList<>());
+        for (int i = 0; i < 10; i++) {                                          // Laço para realizar as 10 replicações necessarias
+            Solucao solucao = new Solucao();
+            for (int j = 0; j < qtdMaquinas; j++) {                             // Criando as maquinas com suas lista de tarefas
+                solucao.getMaquinas().add(new ArrayList<>());
+            }
+            for (int j = 0; j < qtdTarefas; j++) {                              // Tarefas de valores Randomicos são inseridas na primeira maquina
+                solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);        // Gera numero aleatorio entre 0 e 100 para cada tarefa
+            }
+            primeiraMelhora(solucao);
         }
-        // Valores Randomicos das tarefas na primeira maquina
-        for (int i = 0; i < qtdTarefas; i++) {
-            solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);
-        }
-        primeiraMelhora(solucao);
     }
     
     private void primeiraMelhora(Solucao solucao) {
         Solucao novaSolucao;
         int makespanAtual;
         do {
-            makespanAtual = solucao.calcularMakespan();
+            makespanAtual = solucao.calcularMakespan();                         // Salva makespanAtual para não precisar calcular duas vezes a cada iteração
             novaSolucao = vizinho(solucao);
-            if(novaSolucao.calcularMakespan() < makespanAtual){
-                solucao = novaSolucao;
+            if(novaSolucao.calcularMakespan() < makespanAtual){                 // Se a solução vizinha teve melhora
+                solucao = novaSolucao;                                          // Atribui como nova solução
             }
-        } while (novaSolucao.calcularMakespan() < makespanAtual);
+        } while (novaSolucao.calcularMakespan() < makespanAtual);               // Enquanto tiver melhora vai continuar
     }
 
     private Solucao vizinho(Solucao solucao) {
-        Solucao temp = new Solucao(solucao);                                    
+        Solucao temp = new Solucao(solucao);                                    // Cria nova solução COPIANDO a antiga
         List<Integer> maquinaCritica = 
                 temp.getMaquinas().get(temp.getIndexMaquinaCritica());          // Pegar maquina critica
         int makespanAtual = temp.calcularMakespan();                            // Salva antigo maquespan antes de alterar a solução
