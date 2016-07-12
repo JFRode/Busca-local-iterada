@@ -8,7 +8,7 @@ public class ControladorBLMonotona {
         
     public ControladorBLMonotona() {
         blm = new BLMonotona();
-        relatorio = "";
+        relatorio = "heuristica,n,m,replicacao,tempo,iteracoes,valor,parametro\r\n";
         
         blm.novoMaquinario(10, 15, 1); //  10*1.5 = 15
         relatorio += blm.getRelatorio();

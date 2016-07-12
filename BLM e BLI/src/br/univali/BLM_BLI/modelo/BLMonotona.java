@@ -17,6 +17,7 @@ public class BLMonotona {
     private Random rand;
     private Solucao solucao;
     private String relatorio;
+    private long tempo;
     
     private int iteracoes;
     private int valor;
@@ -27,11 +28,13 @@ public class BLMonotona {
         relatorio = "monotona,";
         iteracoes = 0;
         valor = 0;
+        tempo = 0;
     }
     
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas, int replicacao) {
         int randomico;
         
+        tempo = System.nanoTime();
         solucao.getMaquinas().clear();
         relatorio += qtdTarefas + "," + qtdMaquinas + "," + replicacao + ",";
         
@@ -45,7 +48,7 @@ public class BLMonotona {
         }
         
         primeiraMelhora(solucao);
-        relatorio += "tempo" + "," + iteracoes + "," + valor + "," + "NA";     //  tempo,iteracoes,valor,parametro 
+        relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + valor + "," + "NA\r\n";     //  tempo,iteracoes,valor,parametro 
     }
     
     private void primeiraMelhora(Solucao solucao) {
