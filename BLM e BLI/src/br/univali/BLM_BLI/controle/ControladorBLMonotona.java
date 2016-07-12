@@ -9,13 +9,12 @@ public class ControladorBLMonotona {
     public ControladorBLMonotona() {
         blm = new BLMonotona();
         relatorio = "";
-        blm.novoMaquinario(3, 4);
-//        blm.novoMaquinario(10, 15); //  10*1.5 = 15
-//        blm.novoMaquinario(10, 20); //  10*2.0 = 20
-//        blm.novoMaquinario(20, 30); //  20*1.5 = 15
-//        blm.novoMaquinario(20, 40); //  20*2.0 = 20
-//        blm.novoMaquinario(50, 75); //  50*1.5 = 15
-//        blm.novoMaquinario(50, 100);//  50*2.0 = 20
+        blm.novoMaquinario(10, 32);     //  10^1.5 = 31,6227
+        blm.novoMaquinario(10, 100);    //  10^2.0 = 100
+        blm.novoMaquinario(20, 89);     //  20^1.5 = 89,4427
+        blm.novoMaquinario(20, 400);    //  20^2.0 = 400
+        blm.novoMaquinario(50, 354);    //  50^1.5 = 353,5533
+        blm.novoMaquinario(50, 2500);   //  50^2.0 = 2500
     }
 
     public String getRelatorio() {
