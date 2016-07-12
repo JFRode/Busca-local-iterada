@@ -5,18 +5,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/*
+    heuristica,n,m,replicacao,tempo,iteracoes,valor,parametro 
+    monotona,100,10,1,3.2,1029,88123,NA 
+    monotona,100,10,2,1.2,821,88123,NA 
+    temperasimulada,100,10,1,100,101821,98123,0.99 
+    temperasimulada,100,10,2,100,101833,99123,0.8
+*/
+
 public class BLMonotona {
     private Random rand;
-    Solucao solucao;
+    private Solucao solucao;
+    private String relatorio;
+    
+    private int iteracoes;
+    private int valor;
 
     public BLMonotona() {
         rand = new Random();
         solucao = new Solucao();
+        relatorio = "monotona,";
+        iteracoes = 0;
+        valor = 0;
     }
     
-    public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
-        solucao.getMaquinas().clear();
+    public void novoMaquinario(int qtdMaquinas, int qtdTarefas, int replicacao) {
         int randomico;
+        
+        solucao.getMaquinas().clear();
+        relatorio += qtdTarefas + "," + qtdMaquinas + "," + replicacao + ",";
         
         for (int i = 0; i < qtdMaquinas; i++) {
             solucao.getMaquinas().add(new ArrayList<>());                       //  Instancia maquinas
@@ -27,10 +44,8 @@ public class BLMonotona {
             solucao.getMaquinas().get(0).add(randomico);            //  Instancia as tarefas na primeira maquina
         }
         
-        ControladorBLMonotona.relatorio += "Maquinas:" + qtdMaquinas + "\tTarefas:" + qtdTarefas + "\r\n";
-        relatorioMaquinario();
-        
         primeiraMelhora(solucao);
+        relatorio += "tempo" + "," + iteracoes + "," + valor + "," + "NA";     //  tempo,iteracoes,valor,parametro 
     }
     
     private void primeiraMelhora(Solucao solucao) {
@@ -41,7 +56,6 @@ public class BLMonotona {
             novaSolucao = vizinho(solucao);
             if(novaSolucao.calcularMakespan() < makespanAtual){
                 solucao = novaSolucao;
-                relatorioMaquinario();
             }
         } while (novaSolucao.calcularMakespan() < makespanAtual);
     }
@@ -64,17 +78,8 @@ public class BLMonotona {
         }
         return solucao;                                                         // Se não teve nenhuma melhora retorna solução sem alteraração
     }
-    
-    public void relatorioMaquinario() {
-        ControladorBLMonotona.relatorio += "\r\n--------------------------\r\n";
-        
-        for (List<Integer> maquina : solucao.getMaquinas()) {
-            ControladorBLMonotona.relatorio += "> ";
-            for (Integer tarefa : maquina) {
-                ControladorBLMonotona.relatorio += tarefa + "\t";
-            }
-            ControladorBLMonotona.relatorio += "\r\n";
-        }
-        ControladorBLMonotona.relatorio += "\r\n--------------------------\r\n";
+
+    public String getRelatorio() {
+        return relatorio;
     }
 }
