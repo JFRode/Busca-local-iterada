@@ -14,20 +14,14 @@ public class BLMonotona {
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
         Solucao solucao = new Solucao();
         solucao.getMaquinas().clear();
+        // Criando as maquinas com sua lista de tarefas
         for (int i = 0; i < qtdMaquinas; i++) {
             solucao.getMaquinas().add(new ArrayList<>());
         }
-        /*/PARA TESTES, USAREMOS VALORES FIXOS
+        // Valores Randomicos das tarefas na primeira maquina
         for (int i = 0; i < qtdTarefas; i++) {
             solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);
-        }*/
-        
-        // VALORES RETIRADOS DA APRESENTAÇÃO DO ALEX.
-        solucao.getMaquinas().get(0).add(6);
-        solucao.getMaquinas().get(0).add(1);
-        solucao.getMaquinas().get(0).add(4);
-        solucao.getMaquinas().get(0).add(5);
-        
+        }
         primeiraMelhora(solucao);
     }
     
@@ -36,14 +30,14 @@ public class BLMonotona {
         int makespanAtual;
         do {
             makespanAtual = solucao.calcularMakespan();
-            novaSolucao = visinho(solucao);
+            novaSolucao = vizinho(solucao);
             if(novaSolucao.calcularMakespan() < makespanAtual){
                 solucao = novaSolucao;
             }
         } while (novaSolucao.calcularMakespan() < makespanAtual);
     }
 
-    private Solucao visinho(Solucao solucao) {
+    private Solucao vizinho(Solucao solucao) {
         Solucao temp = new Solucao(solucao);                                    
         List<Integer> maquinaCritica = 
                 temp.getMaquinas().get(temp.getIndexMaquinaCritica());          // Pegar maquina critica
