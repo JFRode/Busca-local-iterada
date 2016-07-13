@@ -15,8 +15,9 @@ public class BLIterada {
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
         double a = 0.1;
         do {
-            System.out.println("alfa: " + a);
+            System.out.println("-------------------\nalfa: " + a);
             for (int i = 0; i < 10; i++) {                                          // Laço para realizar as 10 replicações necessarias
+                System.out.println((i+1) + "ª Replicação");
                 Solucao solucao = new Solucao();
                 for (int j = 0; j < qtdMaquinas; j++) {                             // Criando as maquinas com suas lista de tarefas
                     solucao.getMaquinas().add(new ArrayList<>());
@@ -31,6 +32,12 @@ public class BLIterada {
                 solucao.getMaquinas().get(0).add(1);
                 solucao.getMaquinas().get(0).add(4);
                 solucao.getMaquinas().get(0).add(5);
+                solucao.getMaquinas().get(0).add(8);
+                solucao.getMaquinas().get(0).add(3);
+                solucao.getMaquinas().get(0).add(9);
+                solucao.getMaquinas().get(0).add(2);
+                solucao.getMaquinas().get(0).add(7);
+                solucao.getMaquinas().get(0).add(10);
                 primeiraMelhora(solucao, a);
             }
             a += 0.1;
@@ -52,8 +59,7 @@ public class BLIterada {
                 solucao = vizinhoPerturbado(novaSolucao, a);
                 cont++;
             }
-        } while (cont <= 4);                                                    // Enquanto tiver melhora vai continuar
-        System.out.println("");
+        } while (cont < 4);                                                    // Enquanto tiver melhora vai continuar
     }
 
     private Solucao vizinho(Solucao solucao) {
@@ -77,7 +83,7 @@ public class BLIterada {
 
     private Solucao vizinhoPerturbado(Solucao novaSolucao, double a) {
         // Implementar aqui a perturbação
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return novaSolucao;
     }
 
 }
