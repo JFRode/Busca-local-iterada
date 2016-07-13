@@ -73,6 +73,7 @@ public class BLMonotona {
         
         for (List<Integer> maquina : temp.getMaquinas()) {
             maquina.add(tarefa);                                                // Muda tarefa crítica para a próxima maquina
+            iteracoes++;
             if(temp.calcularMakespan() < makespanAtual){                        // Verifica se melhorou o makespan
                 return temp;                                                    // Se sim retorna a solução atual
             }else{
