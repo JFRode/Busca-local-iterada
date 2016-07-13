@@ -13,53 +13,39 @@ public class BLIterada {
     }
 
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
-        double a = 0.1;
+        double per = 0.1;                                                       // Define o parametro Per
         do {
-            System.out.println("-------------------\nalfa: " + a);
-            for (int i = 0; i < 10; i++) {                                          // Laço para realizar as 10 replicações necessarias
-                System.out.println((i+1) + "ª Replicação");
+            //System.out.println("-------------------\nalfa: " + per);
+            for (int i = 0; i < 10; i++) {                                      // Laço para realizar as 10 replicações necessarias
+                //System.out.println("\t" + (i + 1) + "ª Replicação");
                 Solucao solucao = new Solucao();
-                for (int j = 0; j < qtdMaquinas; j++) {                             // Criando as maquinas com suas lista de tarefas
+                for (int j = 0; j < qtdMaquinas; j++) {                         // Criando as maquinas com suas lista de tarefas
                     solucao.getMaquinas().add(new ArrayList<>());
                 }
-                /*/PARA TESTES, USAREMOS VALORES FIXOS
-            for (int j = 0; j < qtdTarefas; j++) {                              // Tarefas de valores Randomicos são inseridas na primeira maquina
-                solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);        // Gera numero aleatorio entre 0 e 100 para cada tarefa
-            }*/
-
-                // VALORES RETIRADOS DA APRESENTAÇÃO DO ALEX.
-                solucao.getMaquinas().get(0).add(6);
-                solucao.getMaquinas().get(0).add(1);
-                solucao.getMaquinas().get(0).add(4);
-                solucao.getMaquinas().get(0).add(5);
-                solucao.getMaquinas().get(0).add(8);
-                solucao.getMaquinas().get(0).add(3);
-                solucao.getMaquinas().get(0).add(9);
-                solucao.getMaquinas().get(0).add(2);
-                solucao.getMaquinas().get(0).add(7);
-                solucao.getMaquinas().get(0).add(10);
-                primeiraMelhora(solucao, a);
+                for (int j = 0; j < qtdTarefas; j++) {                          // Tarefas de valores Randomicos são inseridas na primeira maquina
+                    solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);    // Gera numero aleatorio entre 0 e 100 para cada tarefa
+                }
+                primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
             }
-            a += 0.1;
-        } while (a < 0.99);
+            per += 0.1;                                                         // Incrementa o Per em 0.1
+        } while (per < 0.99);                                                   // Enquanto per >= 0.1 e <= 0.9
     }
 
     private void primeiraMelhora(Solucao solucao, double a) {
-        Solucao solucaoGlobal = new Solucao(solucao);  
+        Solucao solucaoGlobal = new Solucao(solucao);
         Solucao novaSolucao;
-        int makespanAtual, cont = 0;
+        int cont = 0;
         do {
-            makespanAtual = solucaoGlobal.calcularMakespan();                   // Salva makespanAtual para não precisar calcular duas vezes a cada iteração
             novaSolucao = vizinho(solucao);
-            if (novaSolucao.calcularMakespan() < makespanAtual) {               // Se a solução vizinha teve melhora
-                solucaoGlobal = novaSolucao;
+            if (novaSolucao.calcularMakespan() < solucaoGlobal.calcularMakespan()) { 
+                solucaoGlobal = novaSolucao;                                    // Se a solução vizinha teve melhora atribui para a global
                 solucao = novaSolucao;                                          // Atribui como nova solução
-                cont = 0;
+//                cont = 0;                                                       // Se teve alguma melhora zera o contador
             } else {
-                solucao = vizinhoPerturbado(novaSolucao, a);
-                cont++;
+                solucao = vizinhoPerturbado(novaSolucao, a);                    // Se não teve nenhuma melhora Perturba
+                cont++;                                                         // Incrementa contador de não melhora
             }
-        } while (cont < 4);                                                    // Enquanto tiver melhora vai continuar
+        } while (cont < 1000);                                                  // Enquanto nao tiver 1000 iterações sem melhora vai continuar
     }
 
     private Solucao vizinho(Solucao solucao) {
@@ -81,9 +67,20 @@ public class BLIterada {
         return solucao;                                                         // Se não teve nenhuma melhora retorna solução sem alteraração
     }
 
-    private Solucao vizinhoPerturbado(Solucao novaSolucao, double a) {
-        // Implementar aqui a perturbação
-        return novaSolucao;
+    private Solucao vizinhoPerturbado(Solucao solucao, double a) {
+        int percent = Math.round((float) a * 100);                              // Calculo do % a ser perturbado
+        for (int i = 0; i < percent; i++) {                                     // Perturba n%
+            int randMaquina;
+            do {
+                randMaquina = rand.nextInt(solucao.getMaquinas().size());       // Sorteia uma maquina origem
+            } while (solucao.getMaquinas().get(randMaquina).size() < 1);        // Garante que maquina sorteada tenha tarefa(s)
+            int randTarefa = 
+                    rand.nextInt(solucao.getMaquinas().get(randMaquina).size());// Serteia uma tarefa
+            int aux = solucao.getMaquinas().get(randMaquina).get(randTarefa);   // Copia tarefa
+            solucao.getMaquinas().get(randMaquina).remove(randTarefa);          // Remove tarefa da maquina origem
+            randMaquina = rand.nextInt(solucao.getMaquinas().size());           // Sorteia uma maquina destino
+            solucao.getMaquinas().get(randMaquina).add(aux);                    // Atribui a tarefa copiada na maquina destino
+        }
+        return solucao;
     }
-
 }
