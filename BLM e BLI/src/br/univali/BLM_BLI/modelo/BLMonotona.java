@@ -18,16 +18,13 @@ public class BLMonotona {
     private Solucao solucao;
     private String relatorio;
     private long tempo;
-    
     private int iteracoes;
-    private int valor;
 
     public BLMonotona() {
         rand = new Random();
         solucao = new Solucao();
         relatorio = "monotona,";
         iteracoes = 0;
-        valor = 0;
         tempo = 0;
     }
     
@@ -48,7 +45,7 @@ public class BLMonotona {
         }
         
         primeiraMelhora(solucao);
-        relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + valor + "," + "NA\r\n";     //  tempo,iteracoes,valor,parametro 
+        relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + solucao.calcularMakespan() + "," + "NA\r\n";     //  tempo,iteracoes,valor,parametro 
     }
     
     private void primeiraMelhora(Solucao solucao) {
