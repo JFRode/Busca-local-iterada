@@ -7,18 +7,25 @@ import java.util.Random;
 public class BLIterada {
 
     private Random rand;
+    private String relatorio;
+    private long tempo;
+    private int iteracoes;
 
     public BLIterada() {
         rand = new Random();
+        relatorio = "";
+        iteracoes = 0;
+        tempo = 0;
     }
 
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
         double per = 0.1;                                                       // Define o parametro Per
         do {
-            //System.out.println("-------------------\nalfa: " + per);
             for (int i = 0; i < 10; i++) {                                      // Laço para realizar as 10 replicações necessarias
-                //System.out.println("\t" + (i + 1) + "ª Replicação");
+                tempo = System.nanoTime();
+                relatorio += "iterada,";
                 Solucao solucao = new Solucao();
+                relatorio += qtdTarefas + "," + qtdMaquinas + "," + (i+1) + ",";
                 for (int j = 0; j < qtdMaquinas; j++) {                         // Criando as maquinas com suas lista de tarefas
                     solucao.getMaquinas().add(new ArrayList<>());
                 }
@@ -26,6 +33,7 @@ public class BLIterada {
                     solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);    // Gera numero aleatorio entre 0 e 100 para cada tarefa
                 }
                 primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
+                relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + solucao.calcularMakespan() + "," + per + "\r\n";     //  tempo,iteracoes,valor,parametro 
             }
             per += 0.1;                                                         // Incrementa o Per em 0.1
         } while (per < 0.99);                                                   // Enquanto per >= 0.1 e <= 0.9
@@ -58,6 +66,7 @@ public class BLIterada {
 
         for (List<Integer> maquina : temp.getMaquinas()) {
             maquina.add(tarefa);                                                // Muda tarefa crítica para a próxima maquina
+            iteracoes++;
             if (temp.calcularMakespan() < makespanAtual) {                      // Verifica se melhorou o makespan
                 return temp;                                                    // Se sim retorna a solução atual
             } else {
@@ -73,6 +82,7 @@ public class BLIterada {
             int randMaquina;
             do {
                 randMaquina = rand.nextInt(solucao.getMaquinas().size());       // Sorteia uma maquina origem
+                iteracoes++;
             } while (solucao.getMaquinas().get(randMaquina).size() < 1);        // Garante que maquina sorteada tenha tarefa(s)
             int randTarefa = 
                     rand.nextInt(solucao.getMaquinas().get(randMaquina).size());// Serteia uma tarefa
@@ -82,5 +92,9 @@ public class BLIterada {
             solucao.getMaquinas().get(randMaquina).add(aux);                    // Atribui a tarefa copiada na maquina destino
         }
         return solucao;
+    }
+    
+    public String getRelatorio() {
+        return relatorio;
     }
 }

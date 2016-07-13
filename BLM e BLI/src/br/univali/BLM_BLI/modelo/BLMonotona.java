@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/*
-    heuristica,n,m,replicacao,tempo,iteracoes,valor,parametro 
-    monotona,100,10,1,3.2,1029,88123,NA 
-    monotona,100,10,2,1.2,821,88123,NA 
-    temperasimulada,100,10,1,100,101821,98123,0.99 
-    temperasimulada,100,10,2,100,101833,99123,0.8
-*/
-
 public class BLMonotona {
     private Random rand;
     private Solucao solucao;
@@ -22,7 +14,7 @@ public class BLMonotona {
     public BLMonotona() {
         rand = new Random();
         solucao = new Solucao();
-        relatorio = "monotona,";
+        relatorio = "";
         iteracoes = 0;
         tempo = 0;
     }
@@ -31,6 +23,7 @@ public class BLMonotona {
         int randomico;
         for (int i = 0; i < 10; i++) {                                          // Laço para realizar as 10 replicações necessarias
             tempo = System.nanoTime();
+            relatorio += "monotona,";
             Solucao solucao = new Solucao();
             relatorio += qtdTarefas + "," + qtdMaquinas + "," + (i+1) + ",";
             for (int j = 0; j < qtdMaquinas; j++) {                             // Criando as maquinas com suas lista de tarefas
