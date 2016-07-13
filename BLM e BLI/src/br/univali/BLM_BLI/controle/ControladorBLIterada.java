@@ -22,12 +22,8 @@ public class ControladorBLIterada {
         //System.out.println("\n\n-------------------\n6º Maquinario");
         bli.novoMaquinario(50, 2500);   //  50^2.0 = 2500
     }
-    
+
     public String getRelatorio() {
         return relatorio;
-    }
-    
-    public void setRelatorio(String relatorio) {
-        this.relatorio = relatorio;
     }
 }

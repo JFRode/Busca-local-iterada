@@ -14,7 +14,7 @@ public class Solucao {
     }
 
     // Copia de uma solução antiga
-    Solucao(Solucao solucao) {
+    public Solucao(Solucao solucao) {
         maquinas = new ArrayList(solucao.getMaquinas().size());
         for (List<Integer> maquina : solucao.getMaquinas()) {
             this.maquinas.add(new ArrayList<>(maquina));

@@ -4,23 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/*
+    heuristica,n,m,replicacao,tempo,iteracoes,valor,parametro 
+    monotona,100,10,1,3.2,1029,88123,NA 
+    monotona,100,10,2,1.2,821,88123,NA 
+    temperasimulada,100,10,1,100,101821,98123,0.99 
+    temperasimulada,100,10,2,100,101833,99123,0.8
+*/
+
 public class BLMonotona {
     private Random rand;
+    private Solucao solucao;
+    private String relatorio;
+    private long tempo;
+    private int iteracoes;
 
     public BLMonotona() {
         rand = new Random();
+        solucao = new Solucao();
+        relatorio = "monotona,";
+        iteracoes = 0;
+        tempo = 0;
     }
     
     public void novoMaquinario(int qtdMaquinas, int qtdTarefas) {
+        int randomico;
         for (int i = 0; i < 10; i++) {                                          // Laço para realizar as 10 replicações necessarias
+            tempo = System.nanoTime();
             Solucao solucao = new Solucao();
+            relatorio += qtdTarefas + "," + qtdMaquinas + "," + (i+1) + ",";
             for (int j = 0; j < qtdMaquinas; j++) {                             // Criando as maquinas com suas lista de tarefas
                 solucao.getMaquinas().add(new ArrayList<>());
             }
-            for (int j = 0; j < qtdTarefas; j++) {                              // Tarefas de valores Randomicos são inseridas na primeira maquina
-                solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);        // Gera numero aleatorio entre 0 e 100 para cada tarefa
+            for (int j = 0; j < qtdTarefas; j++) { 
+                randomico = rand.nextInt(100) + 1;                              // Gera numero aleatorio entre 0 e 100 para cada tarefa
+                solucao.getMaquinas().get(0).add(randomico);                    // Tarefas de valores Randomicos são inseridas na primeira maquina
             }
             primeiraMelhora(solucao);
+            relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + solucao.calcularMakespan() + "," + "NA\r\n";     //  tempo,iteracoes,valor,parametro 
         }
     }
     
@@ -40,12 +61,13 @@ public class BLMonotona {
         Solucao temp = new Solucao(solucao);                                    // Cria nova solução COPIANDO a antiga
         List<Integer> maquinaCritica = 
                 temp.getMaquinas().get(temp.getIndexMaquinaCritica());          // Pegar maquina critica
-        int makespanAtual = temp.calcularMakespan();                            // Salva antigo maquespan antes de alterar a solução
+        int makespanAtual = temp.calcularMakespan();                            // Salva antigo makespan antes de alterar a solução
         int tarefa = maquinaCritica.get(maquinaCritica.size()-1);               // Salva tarefa a ser trocada
         maquinaCritica.remove(maquinaCritica.size()-1);                         // Remove tarefa a ser trocada da solução
         
         for (List<Integer> maquina : temp.getMaquinas()) {
             maquina.add(tarefa);                                                // Muda tarefa crítica para a próxima maquina
+            iteracoes++;
             if(temp.calcularMakespan() < makespanAtual){                        // Verifica se melhorou o makespan
                 return temp;                                                    // Se sim retorna a solução atual
             }else{
@@ -54,5 +76,8 @@ public class BLMonotona {
         }
         return solucao;                                                         // Se não teve nenhuma melhora retorna solução sem alteraração
     }
-    
+
+    public String getRelatorio() {
+        return relatorio;
+    }
 }
