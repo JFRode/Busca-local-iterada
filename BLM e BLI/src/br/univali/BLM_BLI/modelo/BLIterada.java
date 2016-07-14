@@ -26,7 +26,7 @@ public class BLIterada {
                 relatorio += "iterada,";
                 Solucao solucao = new Solucao();
                 relatorio += qtdTarefas + "," + qtdMaquinas + "," + (i+1) + ",";
-                for (int j = 0; j < qtdMaquinas; j++) {                         // Criando as maquinas com suas lista de tarefas
+                for (int j = 0; j < qtdMaquinas; j++) {                         // Criando as maquinas com suas listas de tarefas
                     solucao.getMaquinas().add(new ArrayList<>());
                 }
                 for (int j = 0; j < qtdTarefas; j++) {                          // Tarefas de valores Randomicos são inseridas na primeira maquina
@@ -44,14 +44,14 @@ public class BLIterada {
         Solucao novaSolucao;
         int cont = 0;
         do {
-            novaSolucao = vizinho(solucao);
+            novaSolucao = new Solucao(vizinho(solucao));
             if (novaSolucao.calcularMakespan() < solucaoGlobal.calcularMakespan()) { 
-                solucaoGlobal = novaSolucao;                                    // Se a solução vizinha teve melhora atribui para a global
+                solucaoGlobal = new Solucao(novaSolucao);                                    // Se a solução vizinha teve melhora atribui para a global
                 solucao = novaSolucao;                                          // Atribui como nova solução
-//                cont = 0;                                                       // Se teve alguma melhora zera o contador
+                cont = 0;                                                       // Se teve alguma melhora zera o contador
             } else {
-                solucao = vizinhoPerturbado(novaSolucao, a);                    // Se não teve nenhuma melhora Perturba
                 cont++;                                                         // Incrementa contador de não melhora
+                solucao = new Solucao(vizinhoPerturbado(novaSolucao, a));       // Se não teve nenhuma melhora Perturba
             }
         } while (cont < 1000);                                                  // Enquanto nao tiver 1000 iterações sem melhora vai continuar
     }
