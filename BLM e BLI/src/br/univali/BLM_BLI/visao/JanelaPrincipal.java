@@ -36,20 +36,20 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     
     public void gerarRelatorio() {
         try {
-        JFileChooser chooserDiretorio = new JFileChooser();
-        chooserDiretorio.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
-        chooserDiretorio.showOpenDialog(getParent());
-        String diretorio = chooserDiretorio.getSelectedFile().getAbsolutePath();
+            JFileChooser chooserDiretorio = new JFileChooser();
+            chooserDiretorio.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); 
+            chooserDiretorio.showOpenDialog(getParent());
+            String diretorio = chooserDiretorio.getSelectedFile().getAbsolutePath();
 
-        File file = new File(diretorio + "\\Relatorio_BLMxBLI.txt");
-        FileWriter fw = new FileWriter(file);
-        BufferedWriter bw = new BufferedWriter(fw);
-        
-        bw.write(controlMonotona.getRelatorio() + controlIterada.getRelatorio());
-        
-        bw.close();
-        fw.close();
-        JOptionPane.showMessageDialog(this, "Relatorio gerado com sucesso em " + diretorio);
+            File file = new File(diretorio + "\\Relatorio_BLMxBLI.txt");
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write(controlMonotona.getRelatorio() + controlIterada.getRelatorio());
+
+            bw.close();
+            fw.close();
+            JOptionPane.showMessageDialog(this, "Relatorio gerado com sucesso em " + diretorio);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
