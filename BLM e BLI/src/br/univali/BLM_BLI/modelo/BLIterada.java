@@ -50,8 +50,8 @@ public class BLIterada {
         do {
             novaSolucao = new Solucao(vizinho(solucao));
             if (novaSolucao.calcularMakespan() < solucaoGlobal.calcularMakespan()) { 
-                solucaoGlobal = new Solucao(novaSolucao);                                    // Se a solução vizinha teve melhora atribui para a global
-                solucao = novaSolucao;                                          // Atribui como nova solução
+                solucaoGlobal = new Solucao(novaSolucao);                       // Se a solução vizinha teve melhora atribui para a global
+                solucao = new Solucao(novaSolucao);                             // Atribui como nova solução
                 cont = 0;                                                       // Se teve alguma melhora zera o contador
             } else {
                 cont++;                                                         // Incrementa contador de não melhora

@@ -33,23 +33,24 @@ public class BLMonotona {
                 randomico = rand.nextInt(100) + 1;                              // Gera numero aleatorio entre 0 e 100 para cada tarefa
                 solucao.getMaquinas().get(0).add(randomico);                    // Tarefas de valores Randomicos são inseridas na primeira maquina
             }
-            primeiraMelhora(solucao);
+            solucao = primeiraMelhora(solucao);
             relatorio += (System.nanoTime() - tempo) + "," + iteracoes +
                     "," + solucao.calcularMakespan() + "," + "NA\r\n";          //  tempo,iteracoes,valor,parametro 
             iteracoes = 0;                                                      // Zera o contador para a prixima replicação
         }
     }
     
-    private void primeiraMelhora(Solucao solucao) {
+    private Solucao primeiraMelhora(Solucao solucao) {
         Solucao novaSolucao;
         int makespanAtual;
         do {
             makespanAtual = solucao.calcularMakespan();                         // Salva makespanAtual para não precisar calcular duas vezes a cada iteração
-            novaSolucao = vizinho(solucao);
+            novaSolucao = new Solucao(vizinho(solucao));
             if(novaSolucao.calcularMakespan() < makespanAtual){                 // Se a solução vizinha teve melhora
-                solucao = novaSolucao;                                          // Atribui como nova solução
+                solucao = new Solucao(novaSolucao);                             // Atribui como nova solução
             }
         } while (novaSolucao.calcularMakespan() < makespanAtual);               // Enquanto tiver melhora vai continuar
+        return solucao;
     }
 
     private Solucao vizinho(Solucao solucao) {
