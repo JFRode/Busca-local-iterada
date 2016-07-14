@@ -34,7 +34,9 @@ public class BLMonotona {
                 solucao.getMaquinas().get(0).add(randomico);                    // Tarefas de valores Randomicos são inseridas na primeira maquina
             }
             primeiraMelhora(solucao);
-            relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + solucao.calcularMakespan() + "," + "NA\r\n";     //  tempo,iteracoes,valor,parametro 
+            relatorio += (System.nanoTime() - tempo) + "," + iteracoes +
+                    "," + solucao.calcularMakespan() + "," + "NA\r\n";          //  tempo,iteracoes,valor,parametro 
+            iteracoes = 0;                                                      // Zera o contador para a prixima replicação
         }
     }
     
@@ -60,8 +62,8 @@ public class BLMonotona {
         
         for (List<Integer> maquina : temp.getMaquinas()) {
             maquina.add(tarefa);                                                // Muda tarefa crítica para a próxima maquina
-            iteracoes++;
             if(temp.calcularMakespan() < makespanAtual){                        // Verifica se melhorou o makespan
+                iteracoes++;
                 return temp;                                                    // Se sim retorna a solução atual
             }else{
                 maquina.remove(maquina.size()-1);                               // Caso não tenha melhorado da um "Undo"

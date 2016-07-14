@@ -32,14 +32,18 @@ public class BLIterada {
                 for (int j = 0; j < qtdTarefas; j++) {                          // Tarefas de valores Randomicos são inseridas na primeira maquina
                     solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);    // Gera numero aleatorio entre 0 e 100 para cada tarefa
                 }
-                primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
-                relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," + solucao.calcularMakespan() + "," + per + "\r\n";     //  tempo,iteracoes,valor,parametro 
+                solucao = primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
+                relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," 
+                        + solucao.calcularMakespan() + "," + per + "\r\n";      //  tempo,iteracoes,valor,parametro 
+                iteracoes = 0;                                                  // Zera o contador para a prixima replicação
             }
             per += 0.1;                                                         // Incrementa o Per em 0.1
+            per = Math.round(per*100);                                          // Resolver problema do arredondamento no relarorio
+            per = per/100;
         } while (per < 0.99);                                                   // Enquanto per >= 0.1 e <= 0.9
     }
 
-    private void primeiraMelhora(Solucao solucao, double a) {
+    private Solucao primeiraMelhora(Solucao solucao, double a) {
         Solucao solucaoGlobal = new Solucao(solucao);
         Solucao novaSolucao;
         int cont = 0;
@@ -54,6 +58,7 @@ public class BLIterada {
                 solucao = new Solucao(vizinhoPerturbado(novaSolucao, a));       // Se não teve nenhuma melhora Perturba
             }
         } while (cont < 1000);                                                  // Enquanto nao tiver 1000 iterações sem melhora vai continuar
+        return solucaoGlobal;
     }
 
     private Solucao vizinho(Solucao solucao) {
@@ -66,8 +71,8 @@ public class BLIterada {
 
         for (List<Integer> maquina : temp.getMaquinas()) {
             maquina.add(tarefa);                                                // Muda tarefa crítica para a próxima maquina
-            iteracoes++;
             if (temp.calcularMakespan() < makespanAtual) {                      // Verifica se melhorou o makespan
+                iteracoes++;
                 return temp;                                                    // Se sim retorna a solução atual
             } else {
                 maquina.remove(maquina.size() - 1);                             // Caso não tenha melhorado da um "Undo"
@@ -82,7 +87,6 @@ public class BLIterada {
             int randMaquina;
             do {
                 randMaquina = rand.nextInt(solucao.getMaquinas().size());       // Sorteia uma maquina origem
-                iteracoes++;
             } while (solucao.getMaquinas().get(randMaquina).size() < 1);        // Garante que maquina sorteada tenha tarefa(s)
             int randTarefa = 
                     rand.nextInt(solucao.getMaquinas().get(randMaquina).size());// Serteia uma tarefa
