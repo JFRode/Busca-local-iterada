@@ -1,5 +1,6 @@
 package br.univali.BLM_BLI.modelo;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,6 +28,8 @@ public class BLIterada {
                 }
                 primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
             }
+            DecimalFormat formato = new DecimalFormat("#.#");
+            per = Double.valueOf(formato.format(per));
             per += 0.1;                                                         // Incrementa o Per em 0.1
         } while (per < 0.99);                                                   // Enquanto per >= 0.1 e <= 0.9
     }
