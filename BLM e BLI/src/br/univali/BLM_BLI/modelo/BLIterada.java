@@ -32,9 +32,10 @@ public class BLIterada {
                 for (int j = 0; j < qtdTarefas; j++) {                          // Tarefas de valores Randomicos são inseridas na primeira maquina
                     solucao.getMaquinas().get(0).add(rand.nextInt(100) + 1);    // Gera numero aleatorio entre 0 e 100 para cada tarefa
                 }
-                solucao = primeiraMelhora(solucao, per);                                  // Passa a solução e o per como parametros
+                int totalTarefa = solucao.getMaquinas().get(0).size();
+                solucao = primeiraMelhora(solucao, per, totalTarefa);          // Passa a solução e o per como parametros
                 relatorio += (System.nanoTime() - tempo) + "," + iteracoes + "," 
-                        + solucao.calcularMakespan() + "," + per + "\r\n";      //  tempo,iteracoes,valor,parametro 
+                        + solucao.calcularMakespan() + "," + per + "\r\n";      // tempo,iteracoes,valor,parametro 
                 iteracoes = 0;                                                  // Zera o contador para a prixima replicação
             }
             per += 0.1;                                                         // Incrementa o Per em 0.1
@@ -43,7 +44,7 @@ public class BLIterada {
         } while (per < 0.99);                                                   // Enquanto per >= 0.1 e <= 0.9
     }
 
-    private Solucao primeiraMelhora(Solucao solucao, double a) {
+    private Solucao primeiraMelhora(Solucao solucao, double a, int totalTarefa) {
         Solucao solucaoGlobal = new Solucao(solucao);
         Solucao novaSolucao;
         int cont = 0;
@@ -55,7 +56,7 @@ public class BLIterada {
                 cont = 0;                                                       // Se teve alguma melhora zera o contador
             } else {
                 cont++;                                                         // Incrementa contador de não melhora
-                solucao = new Solucao(vizinhoPerturbado(novaSolucao, a));       // Se não teve nenhuma melhora Perturba
+                solucao = new Solucao(vizinhoPerturbado(novaSolucao, a, totalTarefa));// Se não teve nenhuma melhora Perturba
             }
         } while (cont < 1000);                                                  // Enquanto nao tiver 1000 iterações sem melhora vai continuar
         return solucaoGlobal;
@@ -81,9 +82,10 @@ public class BLIterada {
         return solucao;                                                         // Se não teve nenhuma melhora retorna solução sem alteraração
     }
 
-    private Solucao vizinhoPerturbado(Solucao solucao, double a) {
+    private Solucao vizinhoPerturbado(Solucao solucao, double a, int totalTarefa) {
         int percent = Math.round((float) a * 100);                              // Calculo do % a ser perturbado
-        for (int i = 0; i < percent; i++) {                                     // Perturba n%
+        double perTotal = Math.ceil((((float)totalTarefa*(float)percent)/100));
+        for (int i = 0; i < perTotal; i++) {                                    // Perturba n%
             int randMaquina;
             do {
                 randMaquina = rand.nextInt(solucao.getMaquinas().size());       // Sorteia uma maquina origem
